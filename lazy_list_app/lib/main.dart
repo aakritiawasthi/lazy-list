@@ -1,6 +1,6 @@
 // ignore_for_file: unused_local_variable
 
-import 'dart:html';
+//import 'dart:html';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +16,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return  const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Startup Name Generator',
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.white, 
+         foregroundColor: Colors.black,
+        ),
+         ),
       // home: Scaffold(
       //   appBar: AppBar(
       //     title: const Text('Startup Name Generator'
@@ -28,7 +34,7 @@ class MyApp extends StatelessWidget {
       //       child: RandomWords(),
       //     ),
       //      ),
-      home: RandomWords(),
+      home: const RandomWords(),
     );
   }
 }
@@ -41,7 +47,38 @@ class _RandomWordsState extends State<RandomWords> {
   
      @override 
     Widget build(BuildContext context) {
-      void _pushSaved(){}
+      void _pushSaved(){
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (context) {
+              final tiles = _saved.map(
+                (pair) {
+                  return ListTile(
+                    title: Text(
+                      pair.asPascalCase,
+                      style: _biggerFont,
+                    ),
+                  );
+                },
+              );
+              final divided = tiles.isNotEmpty
+              ? ListTile.divideTiles(
+                context: context,
+                tiles: tiles,
+                ).toList()
+                : <Widget>[];
+
+                return Scaffold(
+                  appBar: AppBar(
+                    title: const Text ('Saved Suggestions'),
+
+                  ),
+                  body: ListView(children: divided),
+                  );
+            },
+          ), 
+        );
+      }
       return Scaffold(
         appBar: AppBar(
           title: const Text('Startup Name Generator'),
